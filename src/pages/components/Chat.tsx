@@ -2,17 +2,15 @@ import { useState } from "react";
 
 export default function Chat({ prompt }: { prompt: string }) {
   const [loading, setLoading] = useState(false);
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [generatedText, setGeneratedText] = useState<String>("");
 
   const generateBio = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setGeneratedText("");
     setLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt,
       }),
@@ -36,7 +34,7 @@ export default function Chat({ prompt }: { prompt: string }) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      setGeneratedText((prev) => prev + chunkValue);
     }
     setLoading(false);
   };
@@ -59,22 +57,12 @@ export default function Chat({ prompt }: { prompt: string }) {
         </button>
       )}
       <div className="my-2 space-y-10">
-        {generatedBios && (
+        {generatedText && (
           <>
             <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
-              {generatedBios
-                .substring(generatedBios.indexOf("1") + 3)
-                .split("2.")
-                .map((generatedBio) => {
-                  return (
-                    <div
-                      className="cursor-copy rounded-xl border bg-white p-4 shadow-md transition hover:bg-gray-100 text-black"
-                      key={generatedBio}
-                    >
-                      <p>{generatedBio}</p>
-                    </div>
-                  );
-                })}
+              <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
+                {generatedText}
+              </div>
             </div>
           </>
         )}
