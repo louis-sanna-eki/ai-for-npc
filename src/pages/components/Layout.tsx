@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { ReactNode } from "react";
+import Navbar from './NavBar';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <Navbar/>
         {children}
       </main>
     </>
