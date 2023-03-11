@@ -18,6 +18,9 @@ const Navbar = () => {
           <NavItem href="/chat" isActive={router.pathname === "/chat"}>
             Chat
           </NavItem>
+          <NavItem href="/characters" isActive={router.pathname === "/characters"}>
+            Characters
+          </NavItem>
         </ul>
       <SignSession />
       </div>
