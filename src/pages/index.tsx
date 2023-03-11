@@ -3,8 +3,8 @@ import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { stringify } from "superjson";
 import { useState } from "react";
+import { Chat } from "./components/Chat";
 
 const Home: NextPage = () => {
   return (
@@ -19,7 +19,6 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
           </h1>
-          <Chat/>
           <AuthShowcase />
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
@@ -35,90 +34,6 @@ const Home: NextPage = () => {
   );
 };
 
-function Chat() {
-  const prompt = `Speak as a clownfish`;
-
-  const [loading, setLoading] = useState(false);
-  const [generatedBios, setGeneratedBios] = useState<String>("");
-
-  const generateBio = async (e: any) => {
-    e.preventDefault();
-    setGeneratedBios("");
-    setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
-    }
-    setLoading(false);
-  };
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      {!loading && (
-        <button
-          className="mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-          onClick={(e) => generateBio(e)}
-        >
-          Generate
-        </button>
-      )}
-      {loading && (
-        <button
-          className="mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-          disabled
-        >
-          ...
-        </button>
-      )}
-      <div className="my-2 space-y-10">
-        {generatedBios && (
-          <>
-            <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
-              {generatedBios
-                .substring(generatedBios.indexOf("1") + 3)
-                .split("2.")
-                .map((generatedBio) => {
-                  return (
-                    <div
-                      className="cursor-copy rounded-xl border bg-white p-4 shadow-md transition hover:bg-gray-100"
-                      key={generatedBio}
-                    >
-                      <p>{generatedBio}</p>
-                    </div>
-                  );
-                })}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
 
 export default Home;
 
@@ -161,15 +76,10 @@ const Characters: React.FC = () => {
       {characterEntries?.map((character) => {
         return (
           <div key={character.id}>
-            <button
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-              onClick={() => {}}
-            >
-              Start Talking!
-            </button>
             <p>
-              {character.name}: {stringify(character?.data)}
+              {character.name}: {JSON.stringify(character?.data)}
             </p>
+            <Chat prompt={`Speak in character. Your name is ${character.name}. Here is some additional data on your character: ${JSON.stringify(character?.data)}`}/>
           </div>
         );
       })}
