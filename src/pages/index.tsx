@@ -4,7 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { useState } from "react";
-import Chat from "./components/Chat";
+import Dialog from "./components/Dialog";
 import Button from "./components/Button";
 import Layout from "./components/Layout";
 
@@ -50,7 +50,7 @@ const Characters: React.FC = () => {
             <p className="text-center">
               {JSON.stringify(character?.data, null, 2)}
             </p>
-            <Chat
+            <Dialog
               prompt={`Speak in character. Your name is ${
                 character.name
               }. Here is some additional data on your character: ${JSON.stringify(

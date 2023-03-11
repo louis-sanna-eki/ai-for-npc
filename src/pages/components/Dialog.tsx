@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
-export default function Chat({ prompt }: { prompt: string }) {
+export default function Dialog({ prompt }: { prompt: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<string>("");
   const [messages, setMessages] = useState<ChatGPTMessage[]>([
