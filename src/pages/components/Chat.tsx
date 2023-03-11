@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
 
 export default function Chat({ prompt }: { prompt: string }) {
   const [loading, setLoading] = useState(false);
   const [dialogue, setDialogue] = useState<String>("");
 
-  const generateDialogue = async (e: any) => {
+  const generateDialog = async (e: any) => {
     e.preventDefault();
     setDialogue("");
     setLoading(true);
@@ -41,13 +41,9 @@ export default function Chat({ prompt }: { prompt: string }) {
   };
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <Button
-          // className="mt-8 w-40 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-          disabled={loading}
-          onClick={(e) => generateDialogue(e)}
-        >
-          {loading ? "..." : "Generate"}
-        </Button>
+      <Button disabled={loading} onClick={generateDialog} className="w-40">
+        {loading ? <LoadingDots /> : "Start playing"}
+      </Button>
       <div className="my-2 space-y-10">
         {dialogue && (
           <>
@@ -61,4 +57,28 @@ export default function Chat({ prompt }: { prompt: string }) {
       </div>
     </div>
   );
+}
+
+function LoadingDots({ loading = true }: { loading?: boolean }): JSX.Element {
+  const [dotCount, setDotCount] = useState(1);
+
+  useEffect(() => {
+    let intervalId: any;
+    if (loading) {
+      intervalId = setInterval(() => {
+        setDotCount((count) => {
+          if (count < 3) {
+            return count + 1;
+          } else {
+            return 1;
+          }
+        });
+      }, 500);
+    } else {
+      setDotCount(1);
+    }
+    return () => clearInterval(intervalId);
+  }, [loading]);
+
+  return <span>{".".repeat(dotCount)}</span>;
 }
