@@ -22,9 +22,9 @@ const Home: NextPage = () => {
           </h1>
           <AuthShowcase />
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
+            <div className="text-2xl text-white">
               <Characters />
-            </p>
+            </div>
             <div className="pt-6">
               <CreateCharacterForm />
             </div>
