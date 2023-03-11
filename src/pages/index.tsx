@@ -16,9 +16,6 @@ const Home: NextPage = () => {
           <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
         </h1>
         <div className="flex flex-col items-center gap-2">
-          <div className="text-2xl text-white">
-            <Characters />
-          </div>
           <div className="pt-6">
             <CreateCharacterForm />
           </div>
@@ -30,39 +27,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-
-const Characters: React.FC = () => {
-  const { data: sessionData } = useSession();
-  const { data: characterEntries, isLoading } = api.character.getAll.useQuery();
-
-  // if not authenticated, don't show anything
-  if (!sessionData?.user) {
-    return null;
-  }
-  if (isLoading) return <div>Loading...</div>;
-
-  return (
-    <div className="flex flex-col gap-4">
-      {characterEntries?.map((character) => {
-        return (
-          <div key={character.id}>
-            <p className="text-center font-bold">{character.name}</p>
-            <p className="text-center">
-              {JSON.stringify(character?.data, null, 2)}
-            </p>
-            <Dialog
-              prompt={`Speak in character. Your name is ${
-                character.name
-              }. Here is some additional data on your character: ${JSON.stringify(
-                character?.data
-              )}`}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
 
 const CreateCharacterForm: React.FC = () => {
   const [name, setName] = useState("");

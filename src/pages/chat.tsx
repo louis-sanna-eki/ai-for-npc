@@ -1,11 +1,14 @@
 import { Character } from "@prisma/client";
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { api } from "~/utils/api";
 import Dialog from "./components/Dialog";
 import Layout from "./components/Layout";
 
 const Chat: NextPage = () => {
+  const { data: sessionData } = useSession();
+
   const { data: characters, isLoading } = api.character.getAll.useQuery();
   const [selectedCharacterId, setSelectedCharacterId] = useState<string>();
   const currentCharacter = characters?.find(
@@ -16,6 +19,11 @@ const Chat: NextPage = () => {
     ? buildPrompt(currentCharacter)
     : "Placeholder prompt";
 
+  // if not authenticated, don't show anything
+  if (!sessionData?.user) {
+    return null;
+  }
+
   return (
     <Layout>
       <div className="flex w-full">
@@ -25,7 +33,11 @@ const Chat: NextPage = () => {
           setSelectedCharacterId={setSelectedCharacterId}
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
-          {currentCharacter ? <Dialog key={selectedCharacterId} prompt={prompt} /> : <span className="font-bold">Select a Character</span>}
+          {currentCharacter ? (
+            <Dialog key={selectedCharacterId} prompt={prompt} />
+          ) : (
+            <span className="font-bold">Select a Character</span>
+          )}
         </div>
       </div>
     </Layout>
@@ -62,7 +74,7 @@ function CharacterList({
             onClick={() => setSelectedCharacterId(character.id)}
             className={`cursor-pointer rounded py-2 px-4 ${
               selectedCharacterId === character.id
-                ? "bg-blue-500 text-white"
+                ? "bg-purple-500 text-white"
                 : ""
             }`}
           >
