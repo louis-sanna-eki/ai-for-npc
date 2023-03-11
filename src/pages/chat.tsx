@@ -25,7 +25,7 @@ const Chat: NextPage = () => {
           setSelectedCharacterId={setSelectedCharacterId}
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
-          <Dialog key={selectedCharacterId} prompt={prompt} />
+          {currentCharacter ? <Dialog key={selectedCharacterId} prompt={prompt} /> : <span className="font-bold">Select a Character</span>}
         </div>
       </div>
     </Layout>
@@ -52,7 +52,7 @@ function CharacterList({
   setSelectedCharacterId: Dispatch<SetStateAction<string | undefined>>;
 }) {
   return (
-    <div className="flex h-screen w-1/6 flex-col bg-gray-200 p-4">
+    <div className="flex h-screen w-1/6 flex-col bg-gray-200 p-4 pt-24">
       <h1 className="mb-2 text-2xl font-bold">Characters</h1>
       <p className="mb-2">Select a character:</p>
       <ul className="max-h-60 overflow-auto">
