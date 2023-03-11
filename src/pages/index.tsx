@@ -3,8 +3,8 @@ import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { stringify } from "superjson";
 import { useState } from "react";
+import Chat from "./components/Chat";
 
 const Home: NextPage = () => {
   return (
@@ -34,6 +34,7 @@ const Home: NextPage = () => {
   );
 };
 
+
 export default Home;
 
 const AuthShowcase: React.FC = () => {
@@ -41,7 +42,7 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
@@ -63,7 +64,7 @@ const AuthShowcase: React.FC = () => {
 const Characters: React.FC = () => {
   const { data: sessionData } = useSession();
   const { data: characterEntries, isLoading } = api.character.getAll.useQuery();
-  
+
   // if not authenticated, don't show anything
   if (!sessionData?.user) {
     return null;
@@ -75,24 +76,21 @@ const Characters: React.FC = () => {
       {characterEntries?.map((character) => {
         return (
           <div key={character.id}>
-            <button
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-              onClick={() => {}}
-            >
-              Start Talking!
-            </button>
-            <p>{character.name}: {stringify(character?.data)}</p>
+            <p>
+              {character.name}: {JSON.stringify(character?.data)}
+            </p>
+            <Chat prompt={`Speak in character. Your name is ${character.name}. Here is some additional data on your character: ${JSON.stringify(character?.data)}`}/>
           </div>
-        )
+        );
       })}
     </div>
   );
-}
+};
 
 const CreateCharacterForm: React.FC = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-  const {status} = useSession();
+  const { status } = useSession();
 
   const utils = api.useContext();
   const createCharacter = api.character.create.useMutation({
@@ -101,19 +99,19 @@ const CreateCharacterForm: React.FC = () => {
       const createdAt = new Date();
       const newCharacter = {
         name: newCharacterElement.name,
-        data: {message: newCharacterElement.message},
+        data: { message: newCharacterElement.message },
         createdAt,
         updatedAt: createdAt,
         id: "",
         userId: "",
-      }
+      };
       utils.character.getAll.setData(undefined, (prevCharacters) => {
         if (prevCharacters) {
-          return [...prevCharacters, newCharacter]
+          return [...prevCharacters, newCharacter];
         } else {
           return [newCharacter];
         }
-      })
+      });
     },
     onSettled: async () => {
       await utils.character.getAll.invalidate();
@@ -127,7 +125,7 @@ const CreateCharacterForm: React.FC = () => {
       className="flex gap-2"
       onSubmit={(event) => {
         event.preventDefault();
-        createCharacter.mutate({name, message});
+        createCharacter.mutate({ name, message });
         setName("");
         setMessage("");
       }}
@@ -150,12 +148,12 @@ const CreateCharacterForm: React.FC = () => {
         value={message}
         onChange={(event) => setMessage(event.target.value)}
       />
-    <button
-      type="submit"
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none"
-    >
-      Create
-    </button>
+      <button
+        type="submit"
+        className="rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
+      >
+        Create
+      </button>
     </form>
-  )
-}
+  );
+};
