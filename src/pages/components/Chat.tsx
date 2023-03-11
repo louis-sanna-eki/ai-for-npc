@@ -1,14 +1,51 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
 export default function Chat({ prompt }: { prompt: string }) {
-  const [loading, setLoading] = useState(false);
-  const [dialogue, setDialogue] = useState<String>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [dialog, setDialog] = useState<string>("");
+  const [messages, setMessages] = useState<ChatGPTMessage[]>([
+    { role: "system", content: "You are NPC in a video game." },
+    { role: "user", content: prompt },
+  ]);
+  const liveMessages = useMemo(() => {
+    if (dialog === "") return messages;
+    if (!isLoading) return messages;
+    return [
+      ...messages,
+      { role: "assistant", content: dialog } as ChatGPTMessage,
+    ];
+  }, [messages, dialog]);
 
-  const generateDialog = async (e: any) => {
+  useEffect(() => {
+    if (isLoading) return;
+    if (dialog === "") return;
+    const [lastMessage] = messages.slice(-1);
+    if (lastMessage?.role === "assistant") return;
+    setMessages((prev) => {
+      return [
+        ...prev,
+        { role: "assistant", content: dialog } as ChatGPTMessage,
+      ];
+    });
+  }, [dialog, isLoading]);
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <Button disabled={isLoading} onClick={generateDialog} className="w-40">
+        {isLoading ? <LoadingDots /> : "Start playing"}
+      </Button>
+      <div className="my-2 space-y-10">
+        <Messages messages={liveMessages} />
+      </div>
+    </div>
+  );
+
+  async function generateDialog(e: any) {
     e.preventDefault();
-    setDialogue("");
-    setLoading(true);
+    setDialog("");
+    setIsLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,25 +72,28 @@ export default function Chat({ prompt }: { prompt: string }) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setDialogue((prev) => prev + chunkValue);
+      setDialog((prev) => prev + chunkValue);
     }
-    setLoading(false);
-  };
+    setIsLoading(false);
+  }
+}
+
+
+function Messages({ messages }: { messages: ChatGPTMessage[] }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <Button disabled={loading} onClick={generateDialog} className="w-40">
-        {loading ? <LoadingDots /> : "Start playing"}
-      </Button>
-      <div className="my-2 space-y-10">
-        {dialogue && (
-          <>
-            <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
-              <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
-                {dialogue}
-              </div>
-            </div>
-          </>
-        )}
+    <div>
+      {messages.map(({ content }) => (
+        <TextBox>{content}</TextBox>
+      ))}
+    </div>
+  );
+}
+
+function TextBox({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
+      <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
+        {children}
       </div>
     </div>
   );
