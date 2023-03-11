@@ -31,20 +31,22 @@ export default function Dialog({ prompt }: { prompt: string }) {
     });
   }, [dialog, isLoading]);
 
+  const isReadyForGeneration = messages.slice(-1)[0]?.role === "user" && !isLoading;
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <Button
-        disabled={isLoading}
+      {isReadyForGeneration && <Button
         onClick={(e) => {
           e?.preventDefault();
           generateDialog();
         }}
         className="w-40"
       >
-        {isLoading ? <LoadingDots /> : "Start playing"}
-      </Button>
+        {"Give the initiative."}
+      </Button>}
       <div className="my-2 space-y-10">
         <Messages messages={liveMessages} />
+        {isLoading ? <div className="flex flex-col items-center justify-center"><LoadingDots /></div> : null}
         <AddMessage
           onAdd={(message) => {
             setMessages((prev) => [...prev, message]);
@@ -127,7 +129,7 @@ function Messages({ messages }: { messages: ChatGPTMessage[] }) {
 
 function TextBox({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
+    <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8 mt-4">
       <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
         {children}
       </div>
