@@ -95,7 +95,7 @@ function Chat() {
           ...
         </button>
       )}
-      <div className="my-10 space-y-10">
+      <div className="my-2 space-y-10">
         {generatedBios && (
           <>
             <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
