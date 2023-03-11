@@ -134,7 +134,7 @@ const CreateCharacterForm: React.FC = () => {
     >
       <input
         type="text"
-        className="rounded-md border-2 border-zinc-800 bg-neutral-900 px-4 py-2 focus:outline-none"
+        className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
         placeholder="Your Character Name..."
         minLength={2}
         maxLength={100}
@@ -143,19 +143,19 @@ const CreateCharacterForm: React.FC = () => {
       />
       <input
         type="text"
-        className="rounded-md border-2 border-zinc-800 bg-neutral-900 px-4 py-2 focus:outline-none"
+        className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
         placeholder="Your Character Message..."
         minLength={2}
         maxLength={100}
         value={message}
         onChange={(event) => setMessage(event.target.value)}
       />
-      <button
-        type="submit"
-        className="rounded-md border-2 border-zinc-800 p-2 focus:outline-none"
-      >
-        Create
-      </button>
+    <button
+      type="submit"
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none"
+    >
+      Create
+    </button>
     </form>
   )
 }

@@ -7,6 +7,7 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
 `docker compose up db`
 Then set in your .env:
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres?pgbouncer=true
+DIRECT_URL=postgres://postgres:postgres@localhost:5432/postgres
 NEXTAUTH_URL=http://localhost:3000
 
 ## What's next? How do I make an app with this?
