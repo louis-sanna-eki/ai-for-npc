@@ -15,11 +15,11 @@ const Navbar = () => {
           <NavItem href="/" isActive={router.pathname === "/"}>
             Home
           </NavItem>
-          <NavItem href="/chat" isActive={router.pathname === "/chat"}>
-            Chat
-          </NavItem>
           <NavItem href="/characters" isActive={router.pathname === "/characters"}>
             Characters
+          </NavItem>
+          <NavItem href="/chat" isActive={router.pathname === "/chat"}>
+            Chat
           </NavItem>
         </ul>
       <SignSession />
