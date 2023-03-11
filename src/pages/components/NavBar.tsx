@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import SignSession from "./SignSession";
 
 const Navbar = () => {
   const router = useRouter();
 
   return (
     <nav className="fixed left-0 top-0 h-20 w-full bg-gray-800 text-white">
-      <div className="ml-12 flex h-full max-w-6xl items-center">
+      <div className="mx-12 flex h-full max-w-6sxl items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold sm:text-3xl">AI for NPC</h1>
         </div>
@@ -18,6 +19,7 @@ const Navbar = () => {
             Chat
           </NavItem>
         </ul>
+      <SignSession />
       </div>
     </nav>
   );

@@ -15,7 +15,6 @@ const Home: NextPage = () => {
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
           <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
         </h1>
-        <AuthShowcase />
         <div className="flex flex-col items-center gap-2">
           <div className="text-2xl text-white">
             <Characters />
@@ -31,22 +30,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div className="fixed top-10 right-10 flex items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as: {sessionData.user?.name}</span>}
-      </p>
-      <Button
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </Button>
-    </div>
-  );
-};
 
 const Characters: React.FC = () => {
   const { data: sessionData } = useSession();
