@@ -6,32 +6,26 @@ import { api } from "~/utils/api";
 import { useState } from "react";
 import Chat from "./components/Chat";
 import Button from "./components/Button";
+import Layout from "./components/Layout";
 
 const Home: NextPage = () => {
   return (
-    <>
-      <Head>
-        <title>AI for NPC</title>
-        <meta name="description" content="AI for NPC" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
-          </h1>
-          <AuthShowcase />
-          <div className="flex flex-col items-center gap-2">
-            <div className="text-2xl text-white">
-              <Characters />
-            </div>
-            <div className="pt-6">
-              <CreateCharacterForm />
-            </div>
+    <Layout>
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+          <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
+        </h1>
+        <AuthShowcase />
+        <div className="flex flex-col items-center gap-2">
+          <div className="text-2xl text-white">
+            <Characters />
+          </div>
+          <div className="pt-6">
+            <CreateCharacterForm />
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </Layout>
   );
 };
 
@@ -69,10 +63,10 @@ const Characters: React.FC = () => {
       {characterEntries?.map((character) => {
         return (
           <div key={character.id}>
-            <p className="font-bold text-center">
-              {character.name}
+            <p className="text-center font-bold">{character.name}</p>
+            <p className="text-center">
+              {JSON.stringify(character?.data, null, 2)}
             </p>
-            <p className="text-center">{JSON.stringify(character?.data, null, 2)}</p>
             <Chat
               prompt={`Speak in character. Your name is ${
                 character.name
