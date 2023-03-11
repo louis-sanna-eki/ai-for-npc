@@ -34,25 +34,18 @@ const Home: NextPage = () => {
   );
 };
 
-
 export default Home;
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
-
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="fixed top-10 right-10 flex items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
       </p>
       <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+        className="rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
@@ -79,7 +72,13 @@ const Characters: React.FC = () => {
             <p>
               {character.name}: {JSON.stringify(character?.data)}
             </p>
-            <Chat prompt={`Speak in character. Your name is ${character.name}. Here is some additional data on your character: ${JSON.stringify(character?.data)}`}/>
+            <Chat
+              prompt={`Speak in character. Your name is ${
+                character.name
+              }. Here is some additional data on your character: ${JSON.stringify(
+                character?.data
+              )}`}
+            />
           </div>
         );
       })}
