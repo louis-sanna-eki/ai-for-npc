@@ -12,13 +12,14 @@ export const characterRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        await ctx.prisma.character.create({
+        const newCharacter = await ctx.prisma.character.create({
           data: {
             name: input.name,
             data: input.data,
             userId: ctx.session.user.id,
           },
         });
+        return newCharacter;
       } catch (error) {
         console.log("error", error);
         throw error;

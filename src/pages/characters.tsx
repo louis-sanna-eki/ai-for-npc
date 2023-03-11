@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 import Button from "./components/Button";
@@ -46,6 +47,12 @@ interface Template {
 }
 
 const CreateCharacterForm: React.FC = () => {
+  const router = useRouter();
+
+  const goToChat = (id: string | undefined) => {
+    router.push("/chat" + (id !== undefined ? `?characterId=${id}` : ""));
+  }
+  
   const [name, setName] = useState("");
   const [age, setAge] = useState<number>(0);
   const [occupation, setOccupation] = useState("");
@@ -61,8 +68,9 @@ const CreateCharacterForm: React.FC = () => {
 
   const utils = api.useContext();
   const createCharacter = api.character.create.useMutation({
-    onSettled: async () => {
+    onSettled: async (newCharacter) => {
       await utils.character.getAll.invalidate();
+      goToChat(newCharacter?.id);
     },
   });
 

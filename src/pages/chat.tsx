@@ -6,16 +6,16 @@ import { api } from "~/utils/api";
 import Dialog from "./components/Dialog";
 import Layout from "./components/Layout";
 import { buildPrompt, Template } from "../prompts";
+import { useQueryState } from "next-usequerystate";
 
 const Chat: NextPage = () => {
   const { data: sessionData } = useSession();
 
   const { data: characters, isLoading } = api.character.getAll.useQuery();
-  const [selectedCharacterId, setSelectedCharacterId] = useState<string>();
+  const [selectedCharacterId, setSelectedCharacterId] = useQueryState("characterId");
   const currentCharacter = characters?.find(
     ({ id }) => id === selectedCharacterId
   );
-  console.log("currentCharacter", currentCharacter);
   const prompt = currentCharacter
     ? buildPrompt(currentCharacter.data as unknown as Template)
     : "Placeholder prompt";
@@ -30,8 +30,8 @@ const Chat: NextPage = () => {
       <div className="flex w-full">
         <CharacterList
           characters={characters ?? []}
-          selectedCharacterId={selectedCharacterId}
-          setSelectedCharacterId={setSelectedCharacterId}
+          selectedCharacterId={selectedCharacterId || undefined}
+          setSelectedCharacterId={(newId) => setSelectedCharacterId(`${newId}`)}
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
           {currentCharacter ? (
