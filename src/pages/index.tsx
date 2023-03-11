@@ -69,9 +69,10 @@ const Characters: React.FC = () => {
       {characterEntries?.map((character) => {
         return (
           <div key={character.id}>
-            <p>
-              {character.name}: {JSON.stringify(character?.data)}
+            <p className="font-bold text-center">
+              {character.name}
             </p>
+            <p className="text-center">{JSON.stringify(character?.data, null, 2)}</p>
             <Chat
               prompt={`Speak in character. Your name is ${
                 character.name

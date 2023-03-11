@@ -95,7 +95,7 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
     <div className="flex h-12 gap-2">
       <input
         type="text"
-        className="rounded-md border-2 border-zinc-800 px-4 py-2 text-sm text-black focus:outline-none"
+        className="w-full rounded-md border-2 border-zinc-800 px-4 py-2 text-black focus:outline-none"
         placeholder="Your character message..."
         minLength={2}
         maxLength={100}
@@ -118,7 +118,7 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
 function Messages({ messages }: { messages: ChatGPTMessage[] }) {
   return (
     <div>
-      {messages.map(({ content }) => (
+      {messages.slice(2).map(({ content }) => (
         <TextBox>{content}</TextBox>
       ))}
     </div>
