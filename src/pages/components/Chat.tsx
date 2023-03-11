@@ -1,12 +1,13 @@
 import { useState } from "react";
+import Button from "./Button";
 
 export default function Chat({ prompt }: { prompt: string }) {
   const [loading, setLoading] = useState(false);
-  const [generatedText, setGeneratedText] = useState<String>("");
+  const [dialogue, setDialogue] = useState<String>("");
 
-  const generateBio = async (e: any) => {
+  const generateDialogue = async (e: any) => {
     e.preventDefault();
-    setGeneratedText("");
+    setDialogue("");
     setLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -34,34 +35,25 @@ export default function Chat({ prompt }: { prompt: string }) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedText((prev) => prev + chunkValue);
+      setDialogue((prev) => prev + chunkValue);
     }
     setLoading(false);
   };
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      {!loading && (
-        <button
-          className="mt-8 w-40 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-          onClick={(e) => generateBio(e)}
+      <Button
+          // className="mt-8 w-40 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
+          disabled={loading}
+          onClick={(e) => generateDialogue(e)}
         >
-          Generate
-        </button>
-      )}
-      {loading && (
-        <button
-          className="mt-8 w-40 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-          disabled
-        >
-          ...
-        </button>
-      )}
+          {loading ? "..." : "Generate"}
+        </Button>
       <div className="my-2 space-y-10">
-        {generatedText && (
+        {dialogue && (
           <>
             <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
               <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
-                {generatedText}
+                {dialogue}
               </div>
             </div>
           </>

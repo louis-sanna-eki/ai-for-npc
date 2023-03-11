@@ -5,6 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { useState } from "react";
 import Chat from "./components/Chat";
+import Button from "./components/Button";
 
 const Home: NextPage = () => {
   return (
@@ -42,14 +43,13 @@ const AuthShowcase: React.FC = () => {
   return (
     <div className="fixed top-10 right-10 flex items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+        {sessionData && <span>Logged in as: {sessionData.user?.name}</span>}
       </p>
-      <button
-        className="rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
+      <Button
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
-      </button>
+      </Button>
     </div>
   );
 };
@@ -147,12 +147,12 @@ const CreateCharacterForm: React.FC = () => {
         value={message}
         onChange={(event) => setMessage(event.target.value)}
       />
-      <button
+      <Button
         type="submit"
         className="rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
       >
         Create
-      </button>
+      </Button>
     </form>
   );
 };
