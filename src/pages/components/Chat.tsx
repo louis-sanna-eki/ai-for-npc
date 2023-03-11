@@ -13,7 +13,7 @@ export default function Chat({ prompt }: { prompt: string }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prompt,
+        messages: [{ role: "user", content: prompt }],
       }),
     });
 
