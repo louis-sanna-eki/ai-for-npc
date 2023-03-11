@@ -1,13 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { stringify } from "superjson";
+import { useState } from "react";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -20,35 +19,14 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-[hsl(280,100%,70%)]">AI</span> for NPC
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
+          <AuthShowcase />
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              <Characters />
             </p>
-            <AuthShowcase />
+            <div className="pt-6">
+              <CreateCharacterForm />
+            </div>
           </div>
         </div>
       </main>
@@ -81,3 +59,103 @@ const AuthShowcase: React.FC = () => {
     </div>
   );
 };
+
+const Characters: React.FC = () => {
+  const { data: sessionData } = useSession();
+  const { data: characterEntries, isLoading } = api.character.getAll.useQuery();
+  
+  // if not authenticated, don't show anything
+  if (!sessionData?.user) {
+    return null;
+  }
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <div className="flex flex-col gap-4">
+      {characterEntries?.map((character) => {
+        return (
+          <div key={character.id}>
+            <button
+              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+              onClick={() => {}}
+            >
+              Start Talking!
+            </button>
+            <p>{character.name}: {stringify(character?.data)}</p>
+          </div>
+        )
+      })}
+    </div>
+  );
+}
+
+const CreateCharacterForm: React.FC = () => {
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const {status} = useSession();
+
+  const utils = api.useContext();
+  const createCharacter = api.character.create.useMutation({
+    onMutate: async (newCharacterElement) => {
+      await utils.character.getAll.cancel();
+      const createdAt = new Date();
+      const newCharacter = {
+        name: newCharacterElement.name,
+        data: {message: newCharacterElement.message},
+        createdAt,
+        updatedAt: createdAt,
+        id: "",
+        userId: "",
+      }
+      utils.character.getAll.setData(undefined, (prevCharacters) => {
+        if (prevCharacters) {
+          return [...prevCharacters, newCharacter]
+        } else {
+          return [newCharacter];
+        }
+      })
+    },
+    onSettled: async () => {
+      await utils.character.getAll.invalidate();
+    },
+  });
+
+  if (status !== "authenticated") return null;
+
+  return (
+    <form
+      className="flex gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        createCharacter.mutate({name, message});
+        setName("");
+        setMessage("");
+      }}
+    >
+      <input
+        type="text"
+        className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
+        placeholder="Your Character Name..."
+        minLength={2}
+        maxLength={100}
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+      <input
+        type="text"
+        className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
+        placeholder="Your Character Message..."
+        minLength={2}
+        maxLength={100}
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+      />
+    <button
+      type="submit"
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none"
+    >
+      Create
+    </button>
+    </form>
+  )
+}
