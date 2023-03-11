@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { api } from "~/utils/api";
 import Dialog from "./components/Dialog";
 import Layout from "./components/Layout";
+import { buildPrompt, Template } from "../prompts";
 
 const Chat: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -16,7 +17,7 @@ const Chat: NextPage = () => {
   );
   console.log("currentCharacter", currentCharacter);
   const prompt = currentCharacter
-    ? buildPrompt(currentCharacter)
+    ? buildPrompt(currentCharacter.data as unknown as Template)
     : "Placeholder prompt";
 
   // if not authenticated, don't show anything
@@ -34,7 +35,7 @@ const Chat: NextPage = () => {
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
           {currentCharacter ? (
-            <Dialog key={selectedCharacterId} prompt={prompt} />
+            <Dialog prompt={prompt} />
           ) : (
             <span className="font-bold">Select a Character</span>
           )}
@@ -44,13 +45,6 @@ const Chat: NextPage = () => {
   );
 };
 
-function buildPrompt(character: Character): string {
-  return `Speak in character. Your name is ${
-    character.name
-  }. Here is some additional data on your character: ${JSON.stringify(
-    character?.data
-  )}. If you are asked your name anwser ${character.name}`;
-}
 
 export default Chat;
 
