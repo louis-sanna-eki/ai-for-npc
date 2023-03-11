@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-export { Chat };
-
-function Chat({ prompt }: { prompt: string }) {
+export default function Chat({ prompt }: { prompt: string }) {
   const [loading, setLoading] = useState(false);
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
