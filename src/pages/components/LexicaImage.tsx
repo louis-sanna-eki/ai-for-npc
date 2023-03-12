@@ -31,7 +31,7 @@ function LexicaImage({ character }: { character: Character }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: "NPC portrait " + info }),
       });
-      result.json().then((image) => {
+      result.json().then((image: ImageInfo) => {
         cache[info] = image;
         setImageData(image);
       });
