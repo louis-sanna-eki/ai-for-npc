@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
-
 export const runtime = 'edge'
 
-export default async function fetchSearchResults(req: Request) {
+export default async function handler(req: Request) {
     const { query } = (await req.json()) as { query?: string; }
     const response = await fetch(`https://lexica.art/api/v1/search?q=${query}`);
     const data = await response.json();
