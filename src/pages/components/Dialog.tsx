@@ -3,7 +3,6 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { buildPrompt, Template } from "~/prompts";
 import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
-import LexicaImage from "./LexicaImage";
 
 export default function Dialog({ character }: { character?: Character }) {
   const prompt = character
@@ -42,7 +41,6 @@ export default function Dialog({ character }: { character?: Character }) {
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
-      {character && <LexicaImage character={character}/>}
       <h2 className="text-2xl font-bold text-white">{`Speak with ${character?.name}!`}</h2>
       <div className="my-2 flex w-full flex-col items-center justify-center space-y-10">
         <Messages messages={liveMessages} />
