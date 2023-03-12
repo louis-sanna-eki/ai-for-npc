@@ -1,4 +1,6 @@
-export { buildPrompt };
+import { Url } from "next/dist/shared/lib/router/router";
+
+export { buildPrompt, buildImagePrompt };
 export type { Action, CharacterInfo as CharacterData, Context, Template };
 
 interface CharacterInfo {
@@ -83,3 +85,19 @@ function buildCharacterDescription(template: Template) {
   }
   return result;
 }
+
+function buildImagePrompt(template: Template) {
+  const { character } = template;
+
+  let prompt = "A npc character portrait,";
+  if (character.name) {
+    prompt += `named ${character.name},\n`;
+  }
+  if (character.age) {
+    prompt += `aged ${character.age}\n,`;
+  }
+  if (character.interests) {
+    prompt += `interests ${character.interests}\n`;
+  }
+  return prompt;
+};
