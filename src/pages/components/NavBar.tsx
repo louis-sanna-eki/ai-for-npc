@@ -21,7 +21,7 @@ const Navbar = () => {
             Home
           </NavItem>
           {isLoggedIn ? <NavItem href="/characters" isActive={router.pathname === "/characters"}>
-            Characters
+            NPC creator
           </NavItem>: null}
           {isLoggedIn ? <NavItem href="/chat" isActive={router.pathname === "/chat"}>
             Chat

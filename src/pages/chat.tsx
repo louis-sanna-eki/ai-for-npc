@@ -12,10 +12,19 @@ const Chat: NextPage = () => {
   const { data: sessionData } = useSession();
 
   const { data: characters, isLoading } = api.character.getAll.useQuery();
-  const [selectedCharacterId, setSelectedCharacterId] = useQueryState("characterId");
+  const [selectedCharacterId, setSelectedCharacterId] =
+    useQueryState("characterId");
   const currentCharacter = characters?.find(
     ({ id }) => id === selectedCharacterId
   );
+
+  useEffect(() => {
+    if (selectedCharacterId !== null) return;
+    if (characters === undefined) return;
+    const firstCharacter = characters[0];
+    if (firstCharacter === undefined) return;
+    setSelectedCharacterId(firstCharacter.id);
+  }, [characters]);
 
   // if not authenticated, don't show anything
   if (!sessionData?.user) {
@@ -41,7 +50,6 @@ const Chat: NextPage = () => {
     </Layout>
   );
 };
-
 
 export default Chat;
 
