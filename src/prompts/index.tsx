@@ -3,7 +3,7 @@ export type { Action, CharacterInfo as CharacterData, Context, Template };
 
 interface CharacterInfo {
   name: string;
-  age: 30;
+  age: number;
   occupation: string;
   interests: string;
 }
@@ -20,7 +20,6 @@ interface Context {
 
 interface Template {
   character: CharacterInfo;
-  playerOpinion: string;
   playerDescription: string;
   playerName: string;
   historySummary: string;
@@ -30,7 +29,6 @@ interface Template {
 function buildPrompt(template: Template) {
   const {
     character,
-    playerOpinion,
     playerDescription,
     playerName,
     historySummary,
@@ -38,17 +36,17 @@ function buildPrompt(template: Template) {
 
   const characterDescription = buildCharacterDescription(template);
 
-  const interactionSummary = `
-Your first impression of me is ${playerOpinion}
+  const playerSummary = `
 You know my name, it is ${playerName}.
-My description is ${playerDescription}
-Here is a summary of our interactions until then: ${historySummary}`;
+My description is ${playerDescription}.
+
+Here is a summary of the history of the universe: ${historySummary}`;
 
   const prompt = `You will be playing the role of a character, like in a play or a movie, or a video game! 
 
 ${characterDescription}
 
-${interactionSummary}
+${playerSummary}
 
 You will first greet me.
 if you decide to shoot action = [ATTACK]; 

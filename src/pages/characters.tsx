@@ -37,7 +37,6 @@ interface CharacterData {
 interface Template {
   character: CharacterData;
   playerDescription: string;
-  playerOpinion: string;
   playerName: string;
   historySummary: string;
   actions: {
@@ -58,7 +57,6 @@ const CreateCharacterForm: React.FC = () => {
   const [occupation, setOccupation] = useState("");
   const [interests, setInterests] = useState("");
   const [playerDescription, setPlayerDescription] = useState("");
-  const [playerOpinion, setPlayerOpinion] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [historySummary, setHistorySummary] = useState("");
   const [actions, setActions] = useState<{ condition: string; tag: string }[]>(
@@ -91,7 +89,6 @@ const CreateCharacterForm: React.FC = () => {
               interests,
             },
             playerDescription,
-            playerOpinion,
             playerName,
             historySummary,
             actions,
@@ -102,7 +99,6 @@ const CreateCharacterForm: React.FC = () => {
         setOccupation("");
         setInterests("");
         setPlayerDescription("");
-        setPlayerOpinion("");
         setHistorySummary("");
         setActions([]);
       }}
@@ -152,13 +148,6 @@ const CreateCharacterForm: React.FC = () => {
         placeholder="Player Name"
         value={playerName}
         onChange={(event) => setPlayerName(event.target.value)}
-      />
-      <input
-        type="text"
-        className="focus: rounded-md border-2 border-zinc-800 px-4 py-2"
-        placeholder="Player Opinion"
-        value={playerOpinion}
-        onChange={(event) => setPlayerOpinion(event.target.value)}
       />
       <label className="font-bold text-white">Universe:</label>
       <input
