@@ -111,7 +111,7 @@ const CreateCharacterForm: React.FC = () => {
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
-        placeholder="Name..."
+        placeholder="Name"
         minLength={2}
         maxLength={100}
         value={name}
