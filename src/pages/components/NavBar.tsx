@@ -1,9 +1,14 @@
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SignSession from "./SignSession";
 
 const Navbar = () => {
   const router = useRouter();
+
+  const { data: sessionData } = useSession();
+  const isLoggedIn = !!sessionData?.user;
+
 
   return (
     <nav className="fixed left-0 top-0 h-20 w-full bg-gray-800 text-white">
@@ -15,12 +20,12 @@ const Navbar = () => {
           <NavItem href="/" isActive={router.pathname === "/"}>
             Home
           </NavItem>
-          <NavItem href="/characters" isActive={router.pathname === "/characters"}>
+          {isLoggedIn ? <NavItem href="/characters" isActive={router.pathname === "/characters"}>
             Characters
-          </NavItem>
-          <NavItem href="/chat" isActive={router.pathname === "/chat"}>
+          </NavItem>: null}
+          {isLoggedIn ? <NavItem href="/chat" isActive={router.pathname === "/chat"}>
             Chat
-          </NavItem>
+          </NavItem>: null}
         </ul>
       <SignSession />
       </div>

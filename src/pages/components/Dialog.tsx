@@ -59,6 +59,7 @@ export default function Dialog({ prompt }: { prompt: string }) {
   );
 
   async function generateDialog(currentMessages: ChatGPTMessage[]) {
+    console.log("currentMessages", currentMessages)
     setDialog("");
     setIsLoading(true);
     const response = await fetch("/api/generate", {
@@ -124,6 +125,7 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
 }
 
 function Messages({ messages }: { messages: ChatGPTMessage[] }) {
+  console.log("messages", messages)
   return (
     <div>
       {messages.slice(2).map(({ content }, index) => (

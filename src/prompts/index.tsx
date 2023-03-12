@@ -26,32 +26,35 @@ interface Template {
   actions: Action[];
 }
 
-function buildPrompt(template: Template): string {
-  const characterData = Object.entries(template.character)
-    .map(([key, value]) => `- ${key}: ${value}\n`)
-    .join("");
 
-  const actions = template.actions
-    .map(
-      (action) =>
-        `If ${action.condition} then end your line with [${action.tag}]`
-    )
-    .join("\n");
+function buildPrompt(template: Template) {
+  const { character, playerOpinion, playerDescription, historySummary, actions } = template;
 
-  return `
-      You will be playing the role of a character, like in a play or a movie, or a video game!
-      
-      Here is the description of your character:
-      ${characterData}
-      
-      I am approaching you
-      I am ${template.playerDescription}
-      
-      Your first impression of me is ${template.playerOpinion}
-      Here is a summary of our interactions until then: ${template.historySummary}
-      You will first greet me.
-      ${actions}
-      
-      Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${template.character.name} lines.
-    `;
+  const characterDescription = `Here is the description of your character:
+- name: ${character.name}
+- age: ${character.age}
+- occupation: ${character.occupation}
+- interests: ${character.interests}`;
+
+  const interactionSummary = `
+Your first impression of me is ${playerOpinion}
+You know my name, it is Joan Kita
+Here is a summary of our interactions until then: ${historySummary}`;
+
+  const prompt = `You will be playing the role of a character, like in a play or a movie, or a video game! 
+
+${characterDescription}
+
+${interactionSummary}
+
+You will first greet me.
+if you decide to shoot action = [ATTACK]; 
+if you make me an offer to spare me and I accept, action = [JOIN PARTY]; 
+
+Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${character.name} lines.
+
+You MUST give ${character.name} answer.
+`;
+
+  return prompt;
 }
