@@ -2,16 +2,18 @@ import { Character } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import { Template } from "~/prompts";
 
-const cache = {} as Record<string, any>;
+const cache = {} as Record<string, ImageInfo>;
+
+interface ImageInfo {
+  id: string;
+  src: string;
+  prompt: string;
+  width: number;
+  height: number;
+}
 
 function LexicaImage({ character }: { character: Character }) {
-  const [imageData, setImageData] = useState<{
-    id: string;
-    src: string;
-    prompt: string;
-    width: number;
-    height: number;
-  } | null>(null);
+  const [imageData, setImageData] = useState<ImageInfo | null>(null);
 
   const info = Object.values(
     (character?.data as unknown as Template)?.character
@@ -19,8 +21,9 @@ function LexicaImage({ character }: { character: Character }) {
 
   useEffect(() => {
     async function searchImages() {
-      if (cache[info]) {
-        setImageData(cache[info]);
+      const cached = cache[info];
+      if (cached) {
+        setImageData(cached);
         return;
       }
       const result = await fetch("/api/image", {
