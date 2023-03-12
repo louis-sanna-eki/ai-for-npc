@@ -38,7 +38,7 @@ export default function Dialog({ prompt }: { prompt: string }) {
       {isReadyForGeneration && <Button
         onClick={(e) => {
           e?.preventDefault();
-          generateDialog();
+          generateDialog(messages);
         }}
         className="w-40"
       >
@@ -49,21 +49,22 @@ export default function Dialog({ prompt }: { prompt: string }) {
         {isLoading ? <div className="flex flex-col items-center justify-center"><LoadingDots /></div> : null}
         <AddMessage
           onAdd={(message) => {
-            setMessages((prev) => [...prev, message]);
-            generateDialog();
+            const newMessages = [...messages, message]
+            setMessages(newMessages);
+            generateDialog(newMessages);
           }}
         />
       </div>
     </div>
   );
 
-  async function generateDialog() {
+  async function generateDialog(currentMessages: ChatGPTMessage[]) {
     setDialog("");
     setIsLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages: currentMessages }),
     });
 
     if (!response.ok) {
@@ -125,8 +126,8 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
 function Messages({ messages }: { messages: ChatGPTMessage[] }) {
   return (
     <div>
-      {messages.slice(2).map(({ content }) => (
-        <TextBox>{content}</TextBox>
+      {messages.slice(2).map(({ content }, index) => (
+        <TextBox key={index}>{content}</TextBox>
       ))}
     </div>
   );

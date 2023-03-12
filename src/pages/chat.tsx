@@ -20,6 +20,9 @@ const Chat: NextPage = () => {
     ? buildPrompt(currentCharacter.data as unknown as Template)
     : "Placeholder prompt";
 
+  console.log("currentCharacter", currentCharacter);
+  console.log("prompt", prompt);
+
   // if not authenticated, don't show anything
   if (!sessionData?.user) {
     return null;

@@ -24,7 +24,6 @@ interface Template {
   playerDescription: string
   historySummary: string;
   actions: Action[];
-  name: string;
 }
 
 function buildPrompt(template: Template): string {
@@ -53,6 +52,6 @@ function buildPrompt(template: Template): string {
       You will first greet me.
       ${actions}
       
-      Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${template.name} lines.
+      Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${template.character.name} lines.
     `;
 }
