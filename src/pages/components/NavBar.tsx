@@ -20,11 +20,11 @@ const Navbar = () => {
           <NavItem href="/" isActive={router.pathname === "/"}>
             Home
           </NavItem>
-          {isLoggedIn ? <NavItem href="/characters" isActive={router.pathname === "/characters"}>
-            NPC creator
-          </NavItem>: null}
           {isLoggedIn ? <NavItem href="/chat" isActive={router.pathname === "/chat"}>
             Chat
+          </NavItem>: null}
+          {isLoggedIn ? <NavItem href="/characters" isActive={router.pathname === "/characters"}>
+            NPC creator
           </NavItem>: null}
         </ul>
       <SignSession />
