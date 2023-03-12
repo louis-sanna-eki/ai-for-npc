@@ -68,11 +68,18 @@ Greetings mortal, what brings you to my realm? Do you seek my divine beauty?
 
 function buildCharacterDescription(template: Template) {
   const { character } = template;
-
-  const characterDescription = `Here is the description of your character:
-- name: ${character.name}
-- age: ${character.age}
-- occupation: ${character.occupation}
-- interests: ${character.interests}`;
-  return characterDescription;
+  let result = "Here is the description of your character:\n";
+  if (character.name) {
+    result += `name: ${character.name}\n`;
+  }
+  if (character.age) {
+    result += `age: ${character.age}\n`;
+  }
+  if (character.occupation) {
+    result += `occupation: ${character.occupation}\n`;
+  }
+  if (character.interests) {
+    result += `interests: ${character.interests}\n`;
+  }
+  return result;
 }
