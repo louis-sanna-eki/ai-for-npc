@@ -91,6 +91,9 @@ function buildCharacterDescription(template: Template) {
   if (character.occupation) {
     result += `occupation: ${character.occupation}\n`;
   }
+  if (character.traits) {
+    result += `traits: ${character.traits.join(",")}\n`;
+  }
   if (character.interests) {
     result += `interests: ${character.interests}\n`;
   }
