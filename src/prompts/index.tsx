@@ -50,19 +50,22 @@ ${characterDescription}
 
 ${playerSummary}
 
-You will first greet me.
-if you decide to shoot action = [ATTACK]; 
-if you make me an offer to spare me and I accept, action = [JOIN PARTY]; 
 
-Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${character.name} lines.
+The fist word MUST be an action.
+Valid actions: [ATTACK] [JOIN PARTY] [NOTHING]
 
 The lines should be lively, engaging, dynamic and witty.
 
+Stay in character! Only speak ${character.name} lines.
+
 // BAD ANSWER
-${character.name}: "Hello there, what can I do for you today?"
+${character.name}: "Hello there, what can I do for you today?" [JUMP]
+
+// BAD ANSWER
+Hello there, what can I do for you today?
 
 // GOOD ANSWER
-Hello there, what can I do for you today?
+[NOTHING] Hello there, what can I do for you today?
 `;
 
   return prompt;
