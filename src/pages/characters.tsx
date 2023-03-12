@@ -214,7 +214,7 @@ const CreateCharacterForm: React.FC = () => {
         ))}
         <button
           type="button"
-          className="my-2 rounded-md bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700 focus:outline-none"
+          className="my-2 rounded-md bg-purple-400 py-2 px-4 font-bold text-white hover:bg-purple-500 focus:outline-none"
           onClick={() => setActions([...actions, { condition: "", tag: "" }])}
         >
           Add Action
