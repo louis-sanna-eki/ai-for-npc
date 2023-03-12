@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Slider } from "@material-ui/core";
 
-function MySlider({ marks }: { marks: { value: string, label: string }[] }) {
+function MySlider({ marks, onChange}: { marks: { value: string, label: string }[]; onChange: any }) {
   const max = marks.length - 1
 
   const valueLabelFormat = (value: number) => {
@@ -11,7 +11,7 @@ function MySlider({ marks }: { marks: { value: string, label: string }[] }) {
   return (
     <div>
       <Slider
-        onChange={console.log}
+        onChange={onChange}
         min={0}
         max={max}
         step={1}

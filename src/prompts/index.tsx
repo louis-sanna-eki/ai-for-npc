@@ -8,6 +8,7 @@ interface CharacterInfo {
   age: number;
   occupation: string;
   interests: string;
+  traits: string[];
 }
 
 interface Action {

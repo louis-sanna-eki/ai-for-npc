@@ -63,6 +63,10 @@ const CreateCharacterForm: React.FC = () => {
   const [actions, setActions] = useState<{ condition: string; tag: string }[]>(
     []
   );
+  const { attributes } = getAttributes();
+  const [traits, setTraits] = useState<string[]>(
+    attributes.map(({ values }) => values[0]?.adjective ?? "")
+  );
   const { status } = useSession();
 
   const utils = api.useContext();
@@ -88,6 +92,7 @@ const CreateCharacterForm: React.FC = () => {
               age,
               occupation,
               interests,
+              traits,
             },
             playerDescription,
             playerName,
@@ -135,7 +140,7 @@ const CreateCharacterForm: React.FC = () => {
         value={interests}
         onChange={(event) => setInterests(event.target.value)}
       />
-      <Personality/>
+      <Personality traits={traits} setTraits={setTraits} />
       <label className="font-bold text-white">Your character:</label>
       <input
         type="text"
@@ -211,12 +216,6 @@ const CreateCharacterForm: React.FC = () => {
           Add Action
         </button>
       </div>
-      <MySlider
-        marks={[
-          { value: "brave", label: "brave" },
-          { value: "evil", label: "evil" },
-        ]}
-      />
       <Button
         type="submit"
         className="rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
@@ -227,27 +226,44 @@ const CreateCharacterForm: React.FC = () => {
   );
 };
 
-function Personality() {
+function Personality({
+  traits,
+  setTraits,
+}: {
+  traits: string[];
+  setTraits: any;
+}) {
   const { attributes } = getAttributes();
   return (
     <>
       <label className="font-bold text-white">NPC traits:</label>
-      {attributes.map(({ name, values }) => {
+      {attributes.map(({ name, values }, index) => {
         const marks = values.map(({ adjective }) => ({
           value: adjective,
           label: adjective,
         }));
         return (
           <>
-            <label className="text-white">{name}</label>
-            <MySlider marks={marks}/>
+            <label key={name} className="text-white">
+              {name}
+            </label>
+            <MySlider
+              key={name + "slider"}
+              marks={marks}
+              onChange={(e: any, newValueIndex: any) => {
+                setTraits([
+                  ...traits.slice(0, index),
+                  marks[newValueIndex]?.value ?? "",
+                  ...traits.slice(index + 1),
+                ]);
+              }}
+            />
           </>
         );
       })}
     </>
   );
 }
-
 
 function getAttributes() {
   return {
