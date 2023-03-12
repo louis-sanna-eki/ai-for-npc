@@ -1,11 +1,11 @@
 export { buildPrompt };
-export type { Action, CharacterInfo as CharacterData, Context, Template }
+export type { Action, CharacterInfo as CharacterData, Context, Template };
 
 interface CharacterInfo {
-  name: string,
-  age: 30,
-  occupation: string,
-  interests: string,
+  name: string;
+  age: 30;
+  occupation: string;
+  interests: string;
 }
 
 interface Action {
@@ -21,24 +21,27 @@ interface Context {
 interface Template {
   character: CharacterInfo;
   playerOpinion: string;
-  playerDescription: string
+  playerDescription: string;
+  playerName: string;
   historySummary: string;
   actions: Action[];
 }
 
-
 function buildPrompt(template: Template) {
-  const { character, playerOpinion, playerDescription, historySummary, actions } = template;
+  const {
+    character,
+    playerOpinion,
+    playerDescription,
+    playerName,
+    historySummary,
+  } = template;
 
-  const characterDescription = `Here is the description of your character:
-- name: ${character.name}
-- age: ${character.age}
-- occupation: ${character.occupation}
-- interests: ${character.interests}`;
+  const characterDescription = buildCharacterDescription(template);
 
   const interactionSummary = `
 Your first impression of me is ${playerOpinion}
-You know my name, it is Joan Kita
+You know my name, it is ${playerName}.
+My description is ${playerDescription}
 Here is a summary of our interactions until then: ${historySummary}`;
 
   const prompt = `You will be playing the role of a character, like in a play or a movie, or a video game! 
@@ -57,4 +60,15 @@ You MUST give ${character.name} answer.
 `;
 
   return prompt;
+}
+
+function buildCharacterDescription(template: Template) {
+  const { character } = template;
+
+  const characterDescription = `Here is the description of your character:
+- name: ${character.name}
+- age: ${character.age}
+- occupation: ${character.occupation}
+- interests: ${character.interests}`;
+  return characterDescription;
 }
