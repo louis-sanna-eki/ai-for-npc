@@ -5,7 +5,7 @@ import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
 export default function Dialog({ character }: { character: Character }) {
-  const prompt = buildPrompt(character.data as unknown as Template) ?? "placeholder prompt";
+  const prompt = buildPrompt(character?.data as unknown as Template) ?? "placeholder prompt";
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<string>("");
   const [messages, setMessages] = useState<ChatGPTMessage[]>([

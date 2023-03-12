@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import Dialog from "./components/Dialog";
 import Layout from "./components/Layout";
-import { buildPrompt, Template } from "../prompts";
 import { useQueryState } from "next-usequerystate";
 
 const Chat: NextPage = () => {
