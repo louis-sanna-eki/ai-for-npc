@@ -57,10 +57,10 @@ if you make me an offer to spare me and I accept, action = [JOIN PARTY];
 Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${character.name} lines.
 
 // BAD ANSWER
-Aphrodite: "Greetings mortal, what brings you to my realm? Do you seek my divine beauty?"
+${character.name}: "Hello there, what can I do for you today?"
 
 // GOOD ANSWER
-Greetings mortal, what brings you to my realm? Do you seek my divine beauty?
+Hello there, what can I do for you today?
 `;
 
   return prompt;
