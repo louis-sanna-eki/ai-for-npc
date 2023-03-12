@@ -109,7 +109,7 @@ const CreateCharacterForm: React.FC = () => {
         setActions([]);
       }}
     >
-      <label className="font-bold text-white">Non Playing Character:</label>
+      <label className="font-bold text-xl text-white">Non Playing Character:</label>
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
@@ -141,7 +141,7 @@ const CreateCharacterForm: React.FC = () => {
         onChange={(event) => setInterests(event.target.value)}
       />
       <Personality traits={traits} setTraits={setTraits} />
-      <label className="font-bold text-white">Your character:</label>
+      <label className="font-bold text-xl text-white">Your character:</label>
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
@@ -156,7 +156,7 @@ const CreateCharacterForm: React.FC = () => {
         value={playerName}
         onChange={(event) => setPlayerName(event.target.value)}
       />
-      <label className="font-bold text-white">Universe:</label>
+      <label className="font-bold text-xl text-white">Universe:</label>
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
@@ -165,7 +165,7 @@ const CreateCharacterForm: React.FC = () => {
         onChange={(event) => setHistorySummary(event.target.value)}
       />
       <div>
-        <label className="mr-4 font-bold text-white">Actions:</label>
+        <label className="mr-4 text-xl font-bold text-white">Actions:</label>
         {actions.map((action, index) => (
           <div key={index} className="mt-1 flex items-center gap-2">
             <input
@@ -236,7 +236,6 @@ function Personality({
   const { attributes } = getAttributes();
   return (
     <>
-      <label className="font-bold text-white">NPC traits:</label>
       {attributes.map(({ name, values }, index) => {
         const marks = values.map(({ adjective }) => ({
           value: adjective,
