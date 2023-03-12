@@ -56,6 +56,8 @@ if you make me an offer to spare me and I accept, action = [JOIN PARTY];
 
 Stay in character! No description of any kind, no stage directions, only dialogue, only speak ${character.name} lines.
 
+The lines should be lively, engaging, dynamic and witty.
+
 // BAD ANSWER
 ${character.name}: "Hello there, what can I do for you today?"
 

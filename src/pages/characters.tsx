@@ -54,7 +54,7 @@ const CreateCharacterForm: React.FC = () => {
   }
   
   const [name, setName] = useState("");
-  const [age, setAge] = useState<number>(0);
+  const [age, setAge] = useState<number>();
   const [occupation, setOccupation] = useState("");
   const [interests, setInterests] = useState("");
   const [playerDescription, setPlayerDescription] = useState("");
@@ -107,7 +107,7 @@ const CreateCharacterForm: React.FC = () => {
         setActions([]);
       }}
     >
-      <label className="font-bold text-white">Character:</label>
+      <label className="font-bold text-white">Non Playing Character:</label>
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
@@ -138,13 +138,20 @@ const CreateCharacterForm: React.FC = () => {
         value={interests}
         onChange={(event) => setInterests(event.target.value)}
       />
-      <label className="font-bold text-white">Player:</label>
+      <label className="font-bold text-white">Your character:</label>
       <input
         type="text"
         className="rounded-md border-2 border-zinc-800 px-4 py-2 focus:outline-none"
         placeholder="Player Description"
         value={playerDescription}
         onChange={(event) => setPlayerDescription(event.target.value)}
+      />
+      <input
+        type="text"
+        className="focus: rounded-md border-2 border-zinc-800 px-4 py-2"
+        placeholder="Player Name"
+        value={playerName}
+        onChange={(event) => setPlayerName(event.target.value)}
       />
       <input
         type="text"

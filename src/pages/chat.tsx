@@ -16,12 +16,6 @@ const Chat: NextPage = () => {
   const currentCharacter = characters?.find(
     ({ id }) => id === selectedCharacterId
   );
-  const prompt = currentCharacter
-    ? buildPrompt(currentCharacter.data as unknown as Template)
-    : "Placeholder prompt";
-
-  console.log("currentCharacter", currentCharacter);
-  console.log("prompt", prompt);
 
   // if not authenticated, don't show anything
   if (!sessionData?.user) {
@@ -38,7 +32,7 @@ const Chat: NextPage = () => {
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
           {currentCharacter ? (
-            <Dialog key={selectedCharacterId} prompt={prompt} />
+            <Dialog key={selectedCharacterId} character={currentCharacter} />
           ) : (
             <span className="font-bold">Select a Character</span>
           )}

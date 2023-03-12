@@ -1,8 +1,11 @@
+import { Character } from "@prisma/client";
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { buildPrompt, Template } from "~/prompts";
 import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
-export default function Dialog({ prompt }: { prompt: string }) {
+export default function Dialog({ character }: { character: Character }) {
+  const prompt = buildPrompt(character.data as unknown as Template) ?? "placeholder prompt";
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<string>("");
   const [messages, setMessages] = useState<ChatGPTMessage[]>([
@@ -34,19 +37,10 @@ export default function Dialog({ prompt }: { prompt: string }) {
   const isReadyForGeneration = messages.slice(-1)[0]?.role === "user" && !isLoading;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      {isReadyForGeneration && <Button
-        onClick={(e) => {
-          e?.preventDefault();
-          generateDialog(messages);
-        }}
-        className="w-40"
-      >
-        {"Give the initiative."}
-      </Button>}
-      <div className="my-2 space-y-10">
+    <div className="flex flex-col items-center justify-center gap-4 w-full">
+      <h2 className="text-2xl font-bold text-white">{`Speak with ${character.name}!`}</h2>
+      <div className="my-2 space-y-10 w-full flex flex-col items-center justify-center">
         <Messages messages={liveMessages} />
-        {isLoading ? <div className="flex flex-col items-center justify-center"><LoadingDots /></div> : null}
         <AddMessage
           onAdd={(message) => {
             const newMessages = [...messages, message]
@@ -100,12 +94,11 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
   }
   return (
     <div className="flex h-12 gap-2">
-      <input
-        type="text"
-        className="w-full rounded-md border-2 border-zinc-800 px-4 py-2 text-black focus:outline-none"
-        placeholder="Your character message..."
-        minLength={2}
-        maxLength={100}
+      <textarea
+        className="rounded-md border-2 border-zinc-800 px-4 py-2 text-black focus:outline-none w-96"
+        placeholder="Have your say.."
+        minLength={10}
+        maxLength={400}
         value={content}
         onChange={(event) => setContent(event.target.value)}
         onKeyDown={(event) => {
@@ -143,28 +136,4 @@ function TextBox({ children }: { children: ReactNode }) {
       </div>
     </div>
   );
-}
-
-function LoadingDots({ loading = true }: { loading?: boolean }): JSX.Element {
-  const [dotCount, setDotCount] = useState(1);
-
-  useEffect(() => {
-    let intervalId: any;
-    if (loading) {
-      intervalId = setInterval(() => {
-        setDotCount((count) => {
-          if (count < 3) {
-            return count + 1;
-          } else {
-            return 1;
-          }
-        });
-      }, 500);
-    } else {
-      setDotCount(1);
-    }
-    return () => clearInterval(intervalId);
-  }, [loading]);
-
-  return <span>{".".repeat(dotCount)}</span>;
 }
