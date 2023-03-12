@@ -4,8 +4,8 @@ import { buildPrompt, Template } from "~/prompts";
 import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
-export default function Dialog({ character }: { character: Character }) {
-  const prompt = buildPrompt(character?.data as unknown as Template) ?? "placeholder prompt";
+export default function Dialog({ character }: { character?: Character }) {
+  const prompt = character ?  buildPrompt(character?.data as unknown as Template) : "placeholder prompt";
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<string>("");
   const [messages, setMessages] = useState<ChatGPTMessage[]>([
@@ -38,7 +38,7 @@ export default function Dialog({ character }: { character: Character }) {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 w-full">
-      <h2 className="text-2xl font-bold text-white">{`Speak with ${character.name}!`}</h2>
+      <h2 className="text-2xl font-bold text-white">{`Speak with ${character?.name}!`}</h2>
       <div className="my-2 space-y-10 w-full flex flex-col items-center justify-center">
         <Messages messages={liveMessages} />
         <AddMessage
