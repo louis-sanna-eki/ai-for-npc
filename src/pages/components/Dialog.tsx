@@ -94,7 +94,7 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
   }
   return (
     <div className="flex h-12 gap-2">
-      <textarea
+      <input
         className="rounded-md border-2 border-zinc-800 px-4 py-2 text-black focus:outline-none w-96"
         placeholder="Have your say.."
         minLength={10}
@@ -121,17 +121,17 @@ function Messages({ messages }: { messages: ChatGPTMessage[] }) {
   console.log("messages", messages)
   return (
     <div>
-      {messages.slice(2).map(({ content }, index) => (
-        <TextBox key={index}>{content}</TextBox>
+      {messages.slice(2).map(({ content, role }, index) => (
+        <TextBox key={index} className={role === "assistant"? "bg-purple-500 hover:bg-purple-400 text-white": ""}>{content}</TextBox>
       ))}
     </div>
   );
 }
 
-function TextBox({ children }: { children: ReactNode }) {
+function TextBox({ children, className= "" }: { children: ReactNode; className?: string;}) {
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8 mt-4">
-      <div className="cursor-copy rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100">
+      <div className={`rounded-xl border bg-white p-4 text-black shadow-md transition hover:bg-gray-100 ${className}`}>
         {children}
       </div>
     </div>
