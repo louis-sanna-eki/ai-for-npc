@@ -5,7 +5,7 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 import Button from "./components/Button";
 import Layout from "./components/Layout";
-import MySlider from "./components/Slider";
+import MySlider from "./components/MySlider";
 
 const Characters: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -51,8 +51,8 @@ const CreateCharacterForm: React.FC = () => {
 
   const goToChat = (id: string | undefined) => {
     router.push("/chat" + (id !== undefined ? `?characterId=${id}` : ""));
-  }
-  
+  };
+
   const [name, setName] = useState("");
   const [age, setAge] = useState<number>();
   const [occupation, setOccupation] = useState("");
@@ -135,6 +135,7 @@ const CreateCharacterForm: React.FC = () => {
         value={interests}
         onChange={(event) => setInterests(event.target.value)}
       />
+      <Personality/>
       <label className="font-bold text-white">Your character:</label>
       <input
         type="text"
@@ -210,7 +211,12 @@ const CreateCharacterForm: React.FC = () => {
           Add Action
         </button>
       </div>
-      <MySlider />
+      <MySlider
+        marks={[
+          { value: "brave", label: "brave" },
+          { value: "evil", label: "evil" },
+        ]}
+      />
       <Button
         type="submit"
         className="rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
@@ -218,6 +224,181 @@ const CreateCharacterForm: React.FC = () => {
         Create
       </Button>
     </form>
-    
   );
 };
+
+function Personality() {
+  const { attributes } = getAttributes();
+  return (
+    <>
+      <label className="font-bold text-white">NPC traits:</label>
+      {attributes.map(({ name, values }) => {
+        const marks = values.map(({ adjective }) => ({
+          value: adjective,
+          label: adjective,
+        }));
+        return (
+          <>
+            <label className="text-white">{name}</label>
+            <MySlider marks={marks}/>
+          </>
+        );
+      })}
+    </>
+  );
+}
+
+
+function getAttributes() {
+  return {
+    attributes: [
+      {
+        name: "Boldness",
+        values: [
+          {
+            adjective: "Spineless",
+            noun: "Craven",
+          },
+          {
+            adjective: "Cowardly",
+            noun: "Coward",
+          },
+          {
+            adjective: "Bold",
+            noun: "Gambler",
+          },
+          {
+            adjective: "Fearless",
+            noun: "Adventurer",
+          },
+        ],
+      },
+      {
+        name: "Compassion",
+        values: [
+          {
+            adjective: "Evil",
+            noun: "Villain",
+          },
+          {
+            adjective: "Callous",
+            noun: "Brute",
+          },
+          {
+            adjective: "Compassionate",
+            noun: "Altruist",
+          },
+          {
+            adjective: "Gracious",
+            noun: "Empath",
+          },
+        ],
+      },
+      {
+        name: "Greed",
+        values: [
+          {
+            adjective: "Content",
+            noun: "Lackey",
+          },
+          {
+            adjective: "Content",
+            noun: "Follower",
+          },
+          {
+            adjective: "Covetous",
+            noun: "Grasper",
+          },
+          {
+            adjective: "Rapacious",
+            noun: "Ravener",
+          },
+        ],
+      },
+      {
+        name: "Honor",
+        values: [
+          {
+            adjective: "Treacherous",
+            noun: "Blackguard",
+          },
+          {
+            adjective: "Dishonorable",
+            noun: "Knave",
+          },
+          {
+            adjective: "Honorable",
+            noun: "Gentleman / Gentlewoman",
+          },
+          {
+            adjective: "Righteous",
+            noun: "Paragon",
+          },
+        ],
+      },
+      {
+        name: "Rationality",
+        values: [
+          {
+            adjective: "Insane",
+            noun: "Maniac",
+          },
+          {
+            adjective: "Irrational",
+            noun: "Fool",
+          },
+          {
+            adjective: "Rational",
+            noun: "Thinker",
+          },
+          {
+            adjective: "Analytic",
+            noun: "Planner",
+          },
+        ],
+      },
+      {
+        name: "Vengefulness",
+        values: [
+          {
+            adjective: "Magnanimous",
+            noun: "Absolver",
+          },
+          {
+            adjective: "Forgiving",
+            noun: "Conciliator",
+          },
+          {
+            adjective: "Resentful",
+            noun: "Quarreler",
+          },
+          {
+            adjective: "Vindictive",
+            noun: "Antagonist",
+          },
+        ],
+      },
+      {
+        name: "Zeal",
+        values: [
+          {
+            adjective: "Godless",
+            noun: "Atheist",
+          },
+          {
+            adjective: "Cynical",
+            noun: "Unbeliever",
+          },
+          {
+            adjective: "Religious",
+            noun: "Believer",
+          },
+          {
+            adjective: "Zealous",
+            noun: "Zealot",
+          },
+        ],
+      },
+    ],
+  };
+}
