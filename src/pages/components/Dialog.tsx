@@ -92,7 +92,10 @@ export default function Dialog({ prompt }: { prompt: string }) {
 
 function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
   const [content, setContent] = useState("");
-
+  const addMessage = () => {
+    onAdd({ role: "user", content });
+    setContent("");
+  }
   return (
     <div className="flex h-12 gap-2">
       <input
@@ -103,13 +106,15 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
         maxLength={100}
         value={content}
         onChange={(event) => setContent(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            addMessage();
+          }
+        }}
       />
       <Button
         disabled={!content.trim()}
-        onClick={() => {
-          onAdd({ role: "user", content });
-          setContent("");
-        }}
+        onClick={addMessage}
       >
         Add
       </Button>
