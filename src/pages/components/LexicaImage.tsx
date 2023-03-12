@@ -15,9 +15,9 @@ interface ImageInfo {
 function LexicaImage({ character }: { character: Character }) {
   const [imageData, setImageData] = useState<ImageInfo | null>(null);
 
-  const info = Object.values(
+  const info = character?.data ? Object.values(
     (character?.data as unknown as Template)?.character
-  ).join(" ");
+  ).join(" ") : "placeholder";
 
   useEffect(() => {
     async function searchImages() {
