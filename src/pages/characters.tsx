@@ -81,7 +81,7 @@ const CreateCharacterForm: React.FC = () => {
 
   return (
     <form
-      className="flex w-96 flex-col gap-2"
+      className="flex w-96 flex-col gap-2 pb-12"
       onSubmit={(event) => {
         event.preventDefault();
         createCharacter.mutate({
