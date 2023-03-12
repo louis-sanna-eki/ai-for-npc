@@ -4,6 +4,8 @@ import { buildPrompt, Template } from "~/prompts";
 import { ChatGPTMessage } from "~/utils/OpenAIStream";
 import Button from "./Button";
 
+const actionRegex = /\[(.*?)\]/g;
+
 export default function Dialog({ character }: { character?: Character }) {
   const prompt = character
     ? buildPrompt(character?.data as unknown as Template)
@@ -36,15 +38,19 @@ export default function Dialog({ character }: { character?: Character }) {
     });
   }, [dialog, isLoading]);
 
+  const lastAction = findAction(dialog);
   const isReadyForGeneration =
-    messages.slice(-1)[0]?.role === "user" && !isLoading;
+    messages.slice(-1)[0]?.role === "assistant" &&
+    !isLoading &&
+    lastAction === "NOTHING";
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <h2 className="text-2xl font-bold text-white">{`Speak with ${character?.name}!`}</h2>
       <div className="my-2 flex w-full flex-col items-center justify-center space-y-10">
-        <Messages messages={liveMessages} />
+        <Messages messages={liveMessages} character={character} />
         <AddMessage
+          disabled={!isReadyForGeneration}
           onAdd={(message) => {
             const newMessages = [...messages, message];
             setMessages(newMessages);
@@ -89,7 +95,13 @@ export default function Dialog({ character }: { character?: Character }) {
   }
 }
 
-function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
+function AddMessage({
+  onAdd,
+  disabled = false,
+}: {
+  onAdd: (msg: ChatGPTMessage) => void;
+  disabled?: boolean;
+}) {
   const [content, setContent] = useState("");
   const addMessage = () => {
     onAdd({ role: "user", content });
@@ -110,31 +122,54 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
           }
         }}
       />
-      <Button disabled={!content.trim()} onClick={addMessage}>
+      <Button disabled={!content.trim() || disabled} onClick={addMessage}>
         Add
       </Button>
     </div>
   );
 }
 
-function Messages({ messages }: { messages: ChatGPTMessage[] }) {
-  console.log("messages", messages);
+function Messages({
+  messages,
+  character,
+}: {
+  messages: ChatGPTMessage[];
+  character?: Character;
+}) {
   return (
     <div>
-      {messages.slice(2).map(({ content, role }, index) => (
-        <TextBox
-          key={index}
-          className={
-            role === "assistant"
-              ? "bg-purple-500 text-white hover:bg-purple-400"
-              : "bg-white text-black hover:bg-gray-100"
-          }
-        >
-          {content}
-        </TextBox>
-      ))}
+      {messages.slice(2).map(({ content, role }, index) => {
+        const action = findAction(content);
+        return (
+          <>
+            <TextBox
+              key={index}
+              className={
+                role === "assistant"
+                  ? "bg-purple-500 text-white hover:bg-purple-400"
+                  : "bg-white text-black hover:bg-gray-100"
+              }
+            >
+              {content
+                .replace(actionRegex, "")
+                .replace(`${character?.name}: `, "")}
+            </TextBox>
+            {action !== "[NOTHING]" ? (
+              <TextBox
+                key={index + "action"}
+                className={"bg-red-500 text-white"}
+              >{`Action ${action.toUpperCase()} initialed!`}</TextBox>
+            ) : null}
+          </>
+        );
+      })}
     </div>
   );
+}
+
+function findAction(content: string) {
+  const [action] = content.match(actionRegex) ?? ["[NOTHING]"];
+  return action;
 }
 
 function TextBox({

@@ -35,7 +35,7 @@ function buildPrompt(template: Template) {
 
   const characterDescription = buildCharacterDescription(template);
 
-  const customActions = (actions ?? []).map((action) => `[${action.tag.toUpperCase()}]`).join(" ");
+  const customActions = (actions ?? []).map((action) => `[${action?.tag?.toUpperCase()}]`).join(" ");
 
   const playerSummary = `
 You know my name, it is ${playerName}.
@@ -50,21 +50,30 @@ ${characterDescription}
 ${playerSummary}
 
 
-The fist word MUST be an action.
+The last word MUST be an action.
 Valid actions: [ATTACK] [JOIN PARTY] [NOTHING] ${customActions}
 
 The lines should be lively, engaging, dynamic and witty.
 
-Stay in character! Only speak ${character.name} lines.
+Stay in character! No description of any kind, only dialogue. Only speak ${character.name} lines.
 
 // BAD ANSWER
-${character.name}: "Hello there, what can I do for you today?" [JUMP]
+[JUMP] ${character.name}: "Hello there, what can I do for you today?"
 
 // BAD ANSWER
 Hello there, what can I do for you today?
 
+// BAD ANSWER
+"Hello there, what can I do for you today?"
+
+// BAD ANSWER
+Hello there, what can I do for you today? (chuckles)
+
+// BAD ANSWER
+Hello there, what can I do for you today? *chuckles*
+
 // GOOD ANSWER
-[NOTHING] Hello there, what can I do for you today?
+Hello there, what can I do for you today? [NOTHING]
 `;
 
   return prompt;
