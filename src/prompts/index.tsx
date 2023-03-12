@@ -44,6 +44,35 @@ My description is ${playerDescription}.
 
 Here is a summary of the history of the universe: ${historySummary}`;
 
+const prompt_test = `You will be playing the role of a character, like in a play or a movie, or a video game! 
+
+${characterDescription}
+
+${playerSummary}
+
+The lines should be lively, engaging, dynamic and witty.
+If you decide to attack me, action = [ATTACK],
+If you decide to help me, action = [JOIN PARTY].
+
+You must write you response in the following format :
+" {
+end_of_conversation : {True [action] / False},
+${character.name} answer : {…}
+}"
+
+Example of valid answer : 
+"{
+end_of_conversation : False,
+${character.name} answer : "What do you want from me?"
+}"
+Example of valid answer : 
+"{
+end_of_conversation : True [ATTACK],
+${character.name} answer : "I cannot stand this! I shall kill you!"
+}"
+Stay in character! Only speak ${character.name}'s lines and wait for my answer. Make sure you answer with the right format !
+`;
+  console.log(prompt_test);
   const prompt = `You will be playing the role of a character, like in a play or a movie, or a video game! 
 
 ${characterDescription}
@@ -68,7 +97,7 @@ Hello there, what can I do for you today?
 [NOTHING] Hello there, what can I do for you today?
 `;
 
-  return prompt;
+  return prompt_test;
 }
 
 function buildCharacterDescription(template: Template) {
