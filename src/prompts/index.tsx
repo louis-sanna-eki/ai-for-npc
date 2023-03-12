@@ -30,14 +30,12 @@ interface Template {
 }
 
 function buildPrompt(template: Template) {
-  const {
-    character,
-    playerDescription,
-    playerName,
-    historySummary,
-  } = template;
+  const { actions, character, playerDescription, playerName, historySummary } =
+    template;
 
   const characterDescription = buildCharacterDescription(template);
+
+  const customActions = (actions ?? []).map((action) => `[${action.tag.toUpperCase()}]`).join(" ");
 
   const playerSummary = `
 You know my name, it is ${playerName}.
@@ -53,7 +51,7 @@ ${playerSummary}
 
 
 The fist word MUST be an action.
-Valid actions: [ATTACK] [JOIN PARTY] [NOTHING]
+Valid actions: [ATTACK] [JOIN PARTY] [NOTHING] ${customActions}
 
 The lines should be lively, engaging, dynamic and witty.
 
@@ -104,4 +102,4 @@ function buildImagePrompt(template: Template) {
     prompt += `interests ${character.interests}\n`;
   }
   return prompt;
-};
+}
