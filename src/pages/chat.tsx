@@ -1,7 +1,7 @@
 import { Character } from "@prisma/client";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import Dialog from "./components/Dialog";
 import Layout from "./components/Layout";
@@ -38,7 +38,7 @@ const Chat: NextPage = () => {
         />
         <div className="flex w-full items-center justify-center pt-16 text-white">
           {currentCharacter ? (
-            <Dialog prompt={prompt} />
+            <Dialog key={selectedCharacterId} prompt={prompt} />
           ) : (
             <span className="font-bold">Select a Character</span>
           )}
