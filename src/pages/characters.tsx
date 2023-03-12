@@ -5,6 +5,7 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 import Button from "./components/Button";
 import Layout from "./components/Layout";
+import MySlider from "./components/Slider";
 
 const Characters: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -209,6 +210,7 @@ const CreateCharacterForm: React.FC = () => {
           Add Action
         </button>
       </div>
+      <MySlider />
       <Button
         type="submit"
         className="rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
@@ -216,5 +218,6 @@ const CreateCharacterForm: React.FC = () => {
         Create
       </Button>
     </form>
+    
   );
 };
