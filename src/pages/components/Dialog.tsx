@@ -49,6 +49,31 @@ export default function Dialog({ character }: { character?: Character }) {
             const newMessages = [...messages, message];
             setMessages(newMessages);
             generateDialog(newMessages);
+            generate([
+              {
+                role: "user",
+                content:
+                  "Task: Write what the NPC is currently thinking. Then choose an appropriate action.\n Possible actions: [ATTACK] [JOIN PARTY] [DANCE] [NOTHING]  \n Bad Answer: Thank you for understanding. How may I assist you today?\n Good Answer: [NOTHING]\n\n\n Context prompts:\n" +
+                  JSON.stringify(newMessages),
+              },
+            ]).then(async (response) => {
+              let done = false;
+              let result = "";
+              const data = response.body;
+              if (!data) {
+                return;
+              }
+
+              const reader = data.getReader();
+              const decoder = new TextDecoder();
+              while (!done) {
+                const { value, done: doneReading } = await reader.read();
+                done = doneReading;
+                const chunkValue = decoder.decode(value);
+                result += chunkValue;
+              }
+              console.log(result);
+            });
           }}
         />
       </div>
@@ -56,14 +81,9 @@ export default function Dialog({ character }: { character?: Character }) {
   );
 
   async function generateDialog(currentMessages: ChatGPTMessage[]) {
-    console.log("currentMessages", currentMessages);
     setDialog("");
     setIsLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: currentMessages }),
-    });
+    const response = await generate(currentMessages);
 
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -87,6 +107,14 @@ export default function Dialog({ character }: { character?: Character }) {
     }
     setIsLoading(false);
   }
+}
+
+async function generate(messages: ChatGPTMessage[]) {
+  return fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages }),
+  });
 }
 
 function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
@@ -118,7 +146,6 @@ function AddMessage({ onAdd }: { onAdd: (msg: ChatGPTMessage) => void }) {
 }
 
 function Messages({ messages }: { messages: ChatGPTMessage[] }) {
-  console.log("messages", messages);
   return (
     <div>
       {messages.slice(2).map(({ content, role }, index) => (
