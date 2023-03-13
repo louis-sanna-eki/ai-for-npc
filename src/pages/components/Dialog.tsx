@@ -13,7 +13,7 @@ export default function Dialog({ character }: { character?: Character }) {
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<string>("");
   const [messages, setMessages] = useState<ChatGPTMessage[]>([
-    { role: "system", content: "You are NPC in a video game." },
+    { role: "system", content: `You are ${character?.name ?? "Anonymous"}. Your occupation is ${(character?.data as unknown as Template)?.character?.occupation ?? "unknown"}` },
     { role: "user", content: prompt },
   ]);
   const liveMessages = useMemo(() => {
