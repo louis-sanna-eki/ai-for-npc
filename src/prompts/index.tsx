@@ -67,26 +67,36 @@ The lines should be lively, engaging, dynamic and witty.
 
 Stay in character! No description of any kind, no stage direction, no action rule, only dialogue. Only speak ${character.name} lines.
 
-// BAD ANSWER: should not indicate character name
+// BAD ANSWER (should not indicate character name)
 ${character.name}: "Hello there, what can I do for you today?"
 
-// BAD ANSWER: action is missing
+// BAD ANSWER (action is missing)
 Hello there, what can I do for you today?
 
-// BAD ANSWER: useless parenthesis
+// BAD ANSWER (useless parenthesis)
 "Hello there, what can I do for you today?"
 
-// BAD ANSWER: no stage direction
+// BAD ANSWER (useless stage direction)
 Hello there, what can I do for you today? (chuckles)
 
-// BAD ANSWER: no stage direction
+// BAD ANSWER (useless stage direction)
 *chuckles* Hello there, what can I do for you today?
 
-//BAD ANSWER: no action rule
+//BAD ANSWER (useless action rule)
 IF insolence THEN choke
+
+// BAD ANSWER (useless description)
+${character.name} stands still, looking at the person in front of him.
 
 // GOOD ANSWER
 Hello there, what can I do for you today? [NOTHING]
+
+// GOOD ANSWER
+Hello there, what can I do for you today? [NOTHING]
+
+// GOOD ANSWER
+Are you lost or do you need any assistance? [JOIN PARTY]
+
 `;
 
   return prompt;
