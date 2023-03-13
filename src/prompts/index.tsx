@@ -35,7 +35,14 @@ function buildPrompt(template: Template) {
 
   const characterDescription = buildCharacterDescription(template);
 
-  const customActions = (actions ?? []).map((action) => `[${action?.tag?.toUpperCase()}]`).join(" ");
+  const customActions = (actions ?? [])
+    .filter(({ tag }) => tag !== "")
+    .map((action) => `[${action?.tag?.toUpperCase()}]`)
+    .join(" ");
+
+  const actionClauses = (actions ?? [])
+  .filter(({ tag, condition }) => tag !== "" && condition !== "")
+  .map(({ condition, tag }) => `IF ${condition} THEN ${tag}`).join("\n")
 
   const playerSummary = `
 You know my name, it is ${playerName}.
@@ -52,6 +59,7 @@ ${playerSummary}
 
 The last word MUST be an action.
 Valid actions: [ATTACK] [JOIN PARTY] [NOTHING] ${customActions}
+${actionClauses}
 
 The lines should be lively, engaging, dynamic and witty.
 
@@ -70,7 +78,7 @@ Hello there, what can I do for you today?
 Hello there, what can I do for you today? (chuckles)
 
 // BAD ANSWER
-Hello there, what can I do for you today? *chuckles*
+*chuckles* Hello there, what can I do for you today?
 
 // GOOD ANSWER
 Hello there, what can I do for you today? [NOTHING]
