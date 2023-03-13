@@ -16,6 +16,20 @@ export default function Dialog({ character }: { character?: Character }) {
     { role: "system", content: "You are NPC in a video game." },
     { role: "user", content: prompt },
   ]);
+
+  const targetSubstring = "your target substring";
+  const filteredMessages = messages.map((message) => {
+    if (message.content.includes(targetSubstring)) {
+      const modifiedMessage = {
+        ...message,
+        content: message.content.replace(targetSubstring, "")
+      };
+      return modifiedMessage;
+    } else {
+      return message;
+    }
+  });
+
   const liveMessages = useMemo(() => {
     if (dialog === "") return messages;
     if (!isLoading) return messages;
