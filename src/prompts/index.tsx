@@ -59,26 +59,31 @@ ${playerSummary}
 
 The last word MUST be an action.
 Valid actions: [ATTACK] [JOIN PARTY] [NOTHING] ${customActions}
+Action rules:
 ${actionClauses}
+ELSE choose most relevant action among valid  actions
 
 The lines should be lively, engaging, dynamic and witty.
 
-Stay in character! No description of any kind, only dialogue. Only speak ${character.name} lines.
+Stay in character! No description of any kind, no stage direction, no action rule, only dialogue. Only speak ${character.name} lines.
 
-// BAD ANSWER
-[JUMP] ${character.name}: "Hello there, what can I do for you today?"
+// BAD ANSWER: should not indicate character name
+${character.name}: "Hello there, what can I do for you today?"
 
-// BAD ANSWER
+// BAD ANSWER: action is missing
 Hello there, what can I do for you today?
 
-// BAD ANSWER
+// BAD ANSWER: useless parenthesis
 "Hello there, what can I do for you today?"
 
-// BAD ANSWER
+// BAD ANSWER: no stage direction
 Hello there, what can I do for you today? (chuckles)
 
-// BAD ANSWER
+// BAD ANSWER: no stage direction
 *chuckles* Hello there, what can I do for you today?
+
+//BAD ANSWER: no action rule
+IF insolence THEN choke
 
 // GOOD ANSWER
 Hello there, what can I do for you today? [NOTHING]
