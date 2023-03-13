@@ -65,7 +65,7 @@ function CharacterList({
     <div className="flex h-screen w-1/6 flex-col bg-gray-200 p-4">
       <h1 className="mb-2 text-2xl font-bold">Characters</h1>
       <p className="mb-2">Select a character:</p>
-      <ul className="max-h-60 overflow-auto">
+      <ul className="overflow-auto">
         {characters.map((character) => (
           <li
             key={character.id}
