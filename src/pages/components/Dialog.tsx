@@ -40,9 +40,8 @@ export default function Dialog({ character }: { character?: Character }) {
 
   const lastAction = findAction(dialog);
   const isReadyForGeneration =
-    messages.slice(-1)[0]?.role === "assistant" &&
     !isLoading &&
-    lastAction === "NOTHING";
+    lastAction === "[NOTHING]";
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -52,6 +51,7 @@ export default function Dialog({ character }: { character?: Character }) {
         <AddMessage
           disabled={!isReadyForGeneration}
           onAdd={(message) => {
+            if (message?.content.trim() === "") return;
             const newMessages = [...messages, message];
             setMessages(newMessages);
             generateDialog(newMessages);
@@ -122,7 +122,7 @@ function AddMessage({
           }
         }}
       />
-      <Button disabled={!content.trim() || disabled} onClick={addMessage}>
+      <Button disabled={disabled} onClick={addMessage}>
         Add
       </Button>
     </div>
