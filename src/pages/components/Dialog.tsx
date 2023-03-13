@@ -109,7 +109,7 @@ function AddMessage({
     <div className="flex h-12 gap-2">
       <input
         className="w-96 rounded-md border-2 border-zinc-800 px-4 py-2 text-black focus:outline-none"
-        placeholder="Have your say.."
+        placeholder="Have your say..."
         minLength={10}
         maxLength={400}
         value={content}
@@ -157,7 +157,7 @@ function Messages({
               <TextBox
                 key={index + "action"}
                 className={"bg-red-500 text-white"}
-              >{`Action ${action.toUpperCase()} initialed!`}</TextBox>
+              >{`Action ${action.toUpperCase()} initiated!`}</TextBox>
             ) : null}
           </>
         );
