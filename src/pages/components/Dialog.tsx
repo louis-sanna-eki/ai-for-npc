@@ -39,9 +39,7 @@ export default function Dialog({ character }: { character?: Character }) {
   }, [dialog, isLoading]);
 
   const lastAction = findAction(dialog);
-  const isReadyForGeneration =
-    !isLoading &&
-    lastAction === "[NOTHING]";
+  const isReadyForGeneration = !isLoading && lastAction === "[NOTHING]";
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -150,9 +148,10 @@ function Messages({
                   : "bg-white text-black hover:bg-gray-100"
               }
             >
-              {content
-                .replace(actionRegex, "")
-                .replace(`${character?.name}: `, "")}
+              {(content.split("[")[0] ?? "").replace(
+                `${character?.name}: `,
+                ""
+              )}
             </TextBox>
             {action !== "[NOTHING]" ? (
               <TextBox
